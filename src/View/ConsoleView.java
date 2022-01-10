@@ -1,25 +1,17 @@
 package View;
 
+import Controller.Controller;
+import Entity.Produkt;
+import Repository.Repo;
+
 import java.util.*;
 
 
 public class ConsoleView {
-    /*private MovieControllerInterface movieController;
-    private ActorControllerInterface actorController;
+    private Controller ctrl;
 
-    public ConsoleView(MovieControllerInterface movieController, ActorControllerInterface actorController) {
-        this.movieController = movieController;
-        this.actorController = actorController;
-
-        actorController.addActor(0, "Gheorghe", 2);
-        actorController.addActor(1, "Mihai", 5);
-
-        movieController.addMovie(0, "prim film", MovieType.COMEDY, new ArrayList<>());
-        movieController.addMovie(1, "al doilea film", MovieType.ACTION, new ArrayList<>());
-
-        movieController.addActorToMovie(0, 0);
-        movieController.addActorToMovie(0, 1);
-        movieController.addActorToMovie(1, 0);
+    public ConsoleView(Controller ctrl) {
+        this.ctrl = ctrl;
     }
 
 
@@ -31,16 +23,11 @@ public class ConsoleView {
             System.out.println("""
 
                      0. Exit Program \r
-                     1. Show all Movies \r
-                     2. Show all Actors \r
-                     3. Add a Movie \r
-                     4. Add an Actor \r
-                     5. Remove a Movie \r
-                     6. Remove an Actor \r
-                     7. Update a Movie \r
-                     8. Update an Actor \r
-                     9. Add Actor to Movie \r
-                     10. Get top Actors \r
+                     1. Show all Products \r
+                     2. Add Produkt \r
+                     3. Delete Produkt \r
+                     4. Update Produkt \r
+                     5. Update Inventory \r
                     """);
             System.out.println("Enter input: ");
             int variant = scanner.nextInt();
@@ -49,151 +36,101 @@ public class ConsoleView {
                 case 0:
                     break loop;
                 case 1:
-                    showMovies();
+                    showProducts();
                     break;
                 case 2:
-                    showActors();
+                    addProduct();
                     break;
                 case 3:
-                    addMovie();
+                    deleteProduct();
                     break;
                 case 4:
-                    addActor();
+                    updateProduct();
                     break;
                 case 5:
-                    deleteMovie();
-                    break;
-                case 6:
-                    deleteActor();
-                    break;
-                case 7:
-                    updateMovie();
-                    break;
-                case 8:
-                    updateActor();
-                    break;
-                case 9:
-                    addActorToMovie();
-                    break;
-                case 10:
-                    getTopActors();
+                    updateInventory();
                     break;
             }
 
         }
     }
 
-    private void showMovies() {
-        System.out.println(movieController.getAll());
+    private void showProducts() {
+        System.out.println(ctrl.getAll());
     }
 
-    private void addMovie() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("You will need to write a few things that represent Movie attributes.");
-        System.out.println("Enter Movie id:");
-        try {
-            int id = scanner.nextInt();
-            System.out.println("Enter Movie name:");
-            scanner.nextLine(); //throw away the \n not consumed by nextInt()
-            String name = scanner.nextLine();
-            System.out.println("Enter Movie type:");
-            String movieType = scanner.nextLine();
 
-            movieController.addMovie(id, name, MovieType.valueOf(movieType), new ArrayList<>());
+    private void addProduct() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("You will need to write a few things that represent Product attributes.");
+        System.out.println("Enter Product SKU:");
+        try {
+            int sku = scanner.nextInt();
+            System.out.println("Enter Product name:");
+            scanner.nextLine();
+            String name = scanner.nextLine();
+            System.out.println("Enter Product Preis:");
+            Integer preis = scanner.nextInt();
+            System.out.println("Enter Product Anzahl:");
+            Integer anzahl = scanner.nextInt();
+
+            ctrl.add(name, sku, preis, anzahl);
         } catch (Exception e) {
             throw e;
         }
     }
 
-    private void deleteMovie() {
+    private void deleteProduct() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter Movie id:");
+        System.out.println("Enter Produkt SKU:");
         int id = scanner.nextInt();
-        movieController.deleteMovie(id);
+        ctrl.delete(id);
     }
 
-    private void updateMovie() {
+    private void updateProduct() {
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("You will need to write a few things that represent Movie attributes.");
-            System.out.println("Enter Movie id:");
+            System.out.println("You will need to write a few things that represent Product attributes.");
+            System.out.println("Enter Product sku:");
             int id = scanner.nextInt();
-            System.out.println("Enter Movie name:");
-            scanner.nextLine(); //throw away the \n not consumed by nextInt()
+            System.out.println("Enter Product name:");
+            scanner.nextLine();
             String name = scanner.nextLine();
-            System.out.println("Enter Movie type:");
-            String movieType = scanner.nextLine();
+            System.out.println("Enter Product Preis:");
+            Integer preis = scanner.nextInt();
+            System.out.println("Enter Product Anzahl:");
+            Integer anzahl = scanner.nextInt();
 
-            movieController.updateMovie(id, name, MovieType.valueOf(movieType), new ArrayList<>());
+            ctrl.update(name,id,preis,anzahl);
         } catch (Exception e) {
             throw e;
         }
     }
 
-    private void showActors() {
-        System.out.println(actorController.getAll());
-    }
-
-    private void addActor() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("You will need to write a few things that represent Actor attributes.");
-        System.out.println("Enter Actor id:");
+    private void updateInventory(){
         try {
-            int id = scanner.nextInt();
-            System.out.println("Enter Actor name:");
-            scanner.nextLine(); //throw away the \n not consumed by nextInt()
-            String name = scanner.nextLine();
-            System.out.println("Enter Actor's number of Oscars:");
-            Integer nrOscars = scanner.nextInt();
+            Scanner scanner = new Scanner(System.in);
+            Map<String,Integer> abc=new HashMap<>();
+            System.out.println("You will need to write a few things");
+            boolean ok=true;
+            do {
+                System.out.println("Enter Product name:");
+                scanner.nextLine();
+                String name = scanner.nextLine();
+                System.out.println("Enter Product Anzahl:");
+                Integer anzahl = scanner.nextInt();
+                abc.put(name,anzahl);
 
-            actorController.addActor(id, name, nrOscars);
+                System.out.println("Do you want to add another?[y/n]");
+                String aux = scanner.nextLine();
+                ok=(aux=="y");
+            }while(ok);
+
+
+            ctrl.update_inventory(abc);
+            System.out.println(ctrl.show_updates());
         } catch (Exception e) {
             throw e;
         }
     }
-
-    private void deleteActor() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter Actor id:");
-        int id = scanner.nextInt();
-        actorController.deleteActor(id);
-    }
-
-    private void updateActor() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("You will need to write a few things that represent Actor attributes.");
-        System.out.println("Enter Actor id:");
-        try {
-            int id = scanner.nextInt();
-            System.out.println("Enter Actor name:");
-            scanner.nextLine(); //throw away the \n not consumed by nextInt()
-            String name = scanner.nextLine();
-            System.out.println("Enter Actor's number of Oscars:");
-            Integer nrOscars = scanner.nextInt();
-
-            actorController.updateActor(id, name, nrOscars);
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
-    private void addActorToMovie() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter Movie id:");
-        try {
-            int movieId = scanner.nextInt();
-            System.out.println("Enter Actor id:");
-            int actorId = scanner.nextInt();
-            movieController.addActorToMovie(movieId, actorId);
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
-    private void getTopActors(){
-        List<Map.Entry<Actor, Integer>> topActors = movieController.getTopActors();
-        for(int i = topActors.size() - 1; i >= 0; i--){
-            System.out.println("Name: " + topActors.get(i).getKey().getName() + " " + topActors.get(i).getValue());
-        }
-    }*/
 }

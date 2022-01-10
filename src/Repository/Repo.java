@@ -36,13 +36,15 @@ public class Repo implements CRUDRepo<Produkt>{
     /**
      * removes the entity with the specified id
      *
-     * @param entity entity must not be null
      */
     @Override
-    public void delete(Produkt entity) {
-        if(entity==null)
-            throw new Error();
-        list.remove(entity);
+    public void deleteById(int id) {
+        for(Produkt aux:list){
+            if(aux.getSKU()==id) {
+                list.remove(aux);
+                return;
+            }
+        }
     }
 
     /**

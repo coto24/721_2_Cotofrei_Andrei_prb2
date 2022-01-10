@@ -11,16 +11,14 @@ public interface CRUDRepo<E> {
 
     /**
      * saves given entity
-     * @param entity entity must be not null
      */
     void add(E entity);
 
     /**
      * removes the entity with the specified id
-     * @param entity entity must not be null
      *
      */
-    void delete(E entity);
+    void deleteById(int id);
 
     /**
      * updates given entity
